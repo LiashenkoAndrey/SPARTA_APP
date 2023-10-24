@@ -20,28 +20,57 @@ import java.util.List;
 public class Bot extends TelegramLongPollingBot {
     private static final Logger log = LogManager.getLogger(Bot.class);
 
+    private static final String HOST = "https://2c2d-185-244-159-204.ngrok-free.app";
     @Override
     public void onUpdateReceived(Update update) {
+        var message = update.getMessage();
+        var id = message.getFrom().getId();
         try {
-            var message = update.getMessage();
-            var appInfo = new WebAppInfo("https://c8bd-185-244-159-203.ngrok-free.app?telegramId="+ message.getFrom().getId());
+            if (id == 1053183238L) {
+                execute(SendMessage.builder()
+                        .chatId(message.getChatId())
+                        .text("Обери дію")
+                        .replyMarkup(new InlineKeyboardMarkup(List.of(
+                                List.of(
+                                        InlineKeyboardButton.builder()
+                                                .text("Переглянути замовлення \uD83D\uDCDD")
+                                                .webApp(new WebAppInfo(HOST + "/orders"))
+                                                .build()
+                                ),
+                                List.of(
+                                        InlineKeyboardButton.builder()
+                                                .text("Додати нову позицію \uD83D\uDC1F ")
+                                                .webApp(new WebAppInfo(HOST + "/newGood"))
+                                                .build()
+                                )
+                        )))
+                        .build());
+            }
+                log.info(message.getFrom().getId());
+                var appInfo = new WebAppInfo(HOST + "?telegramId="+ message.getFrom().getId());
 
-            execute(SendMessage.builder()
-                    .chatId(update.getMessage().getChatId())
-                    .replyMarkup(new InlineKeyboardMarkup(List.of(
-                            List.of(
-                                    InlineKeyboardButton.builder()
-                                            .text("Зробити замовлення")
-                                            .webApp(appInfo)
-                                            .build()
-                            )
-                    )))
-                    .text("Давайте почнемо \uD83C\uDF63 \n\n Натисніть кнопку нижче, щоб замовити ідеальний обід")
-                    .build());
+                execute(SendMessage.builder()
+                        .chatId(update.getMessage().getChatId())
+                        .replyMarkup(new InlineKeyboardMarkup(List.of(
+                                List.of(
+                                        InlineKeyboardButton.builder()
+                                                .text("Зробити замовлення")
+                                                .webApp(appInfo)
+                                                .build()
+                                )
+                        )))
+                        .text("Давайте почнемо \uD83C\uDF63 \n\n Натисніть кнопку нижче, щоб замовити ідеальний обід")
+                        .build());
+
+
         } catch (TelegramApiException e) {
             log.error(e);
             throw new RuntimeException(e);
         }
+    }
+
+    private void serveAdmin() {
+
     }
 
     @Override
