@@ -28,6 +28,8 @@ public class GoodController {
     private final GoodRepository goodRepository;
 
     private static final Logger log = LogManager.getLogger(GoodController.class);
+
+    @CrossOrigin(origins = "*")
     @GetMapping("/all")
     public ResponseEntity<List<Good>> getAllGoods() {
         return ResponseEntity.ok()
