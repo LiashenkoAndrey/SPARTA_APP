@@ -20,10 +20,14 @@ public class ClientController {
     private static final Logger log = LogManager.getLogger(ClientRepository.class);
 
     @CrossOrigin(origins = "*")
+    @GetMapping("/isExists")
+    public boolean clientExists(@RequestParam("telegramId") String telegramId) {
+        return clientRepository.existsClientByTelegramId(telegramId);
+    }
+
+    @CrossOrigin(origins = "*")
     @GetMapping
     public Client getClientByTelegramId(@RequestParam("telegramId") String telegramId) {
-        log.info(telegramId);
-        return clientRepository.findClientByTelegramId(telegramId)
-                .orElseThrow(ClientNotFoundException::new);
+        return clientRepository.findClientByTelegramId(telegramId).orElseThrow(ClientNotFoundException::new);
     }
 }

@@ -36,6 +36,4 @@ public class Client {
     @Nullable
     private String address;
 
-    @NotNull
-    private String chatId;
 }

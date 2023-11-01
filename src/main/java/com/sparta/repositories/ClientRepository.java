@@ -9,5 +9,5 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
 
     Optional<Client> findClientByTelegramId(String telegramId);
 
-    Boolean existsByTelegramId(String telegramId);
+    boolean existsClientByTelegramId(String telegramId);
 }

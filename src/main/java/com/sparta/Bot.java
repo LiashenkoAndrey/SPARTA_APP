@@ -20,7 +20,7 @@ import java.util.List;
 public class Bot extends TelegramLongPollingBot {
     private static final Logger log = LogManager.getLogger(Bot.class);
 
-    private static final String HOST = "https://2c2d-185-244-159-204.ngrok-free.app";
+    private static final String HOST = "https://sparta.miloverada.gov.ua:3000/";
     @Override
     public void onUpdateReceived(Update update) {
         var message = update.getMessage();
@@ -46,8 +46,8 @@ public class Bot extends TelegramLongPollingBot {
                         )))
                         .build());
             }
-                log.info(message.getFrom().getId());
-                var appInfo = new WebAppInfo(HOST + "?telegramId="+ message.getFrom().getId());
+
+                var appInfo = new WebAppInfo(HOST);
 
                 execute(SendMessage.builder()
                         .chatId(update.getMessage().getChatId())

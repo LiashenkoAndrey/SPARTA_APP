@@ -22,7 +22,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @NotNull
     private Client client;
 
@@ -35,6 +35,8 @@ public class Order {
 
     @NotNull
     private String methodOfDelivery;
+
+    private String address;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(updatable = false)

@@ -1,9 +1,6 @@
 package com.sparta.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -15,6 +12,7 @@ import java.math.BigDecimal;
 @Setter
 @Entity
 @ToString
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Good {
@@ -29,7 +27,7 @@ public class Good {
     private String name;
 
     @NotNull
-    private String image_url;
+    private Long imageId;
 
     @NotNull
     private BigDecimal price;
