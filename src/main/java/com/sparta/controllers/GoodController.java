@@ -3,25 +3,22 @@ package com.sparta.controllers;
 import com.sparta.domain.Good;
 import com.sparta.domain.GoodMark;
 import com.sparta.domain.Image;
-import com.sparta.domain.dto.Mark;
 import com.sparta.exceptions.ClientNotFoundException;
+import com.sparta.exceptions.GoodNotFoundException;
 import com.sparta.repositories.ClientRepository;
 import com.sparta.repositories.GoodMarkRepository;
 import com.sparta.repositories.GoodRepository;
 import com.sparta.repositories.ImageRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,14 +35,12 @@ public class GoodController {
 
     private static final Logger log = LogManager.getLogger(GoodController.class);
 
-    @CrossOrigin(origins = "*")
     @GetMapping("/all")
     public List<Good> getAllGoods() {
-        return goodRepository.findAll();
+        return goodRepository.findAllByIsDeletedFalse();
 
     }
 
-    @CrossOrigin(origins = "*")
     @PostMapping("/new")
     public void newGood(
             @RequestParam("image") MultipartFile file,
@@ -66,7 +61,6 @@ public class GoodController {
         log.info("saved good: " + good);
     }
 
-    @CrossOrigin(origins = "*")
     @PostMapping("/mark")
     public void markGood(@RequestParam("clientId") Long clientId,
                          @RequestParam("goodId") Long good_id,
@@ -85,11 +79,23 @@ public class GoodController {
     }
 
 
-    @CrossOrigin(origins = "*")
     @GetMapping("/getMarks")
     public List<GoodMark> getGoodsMarksByClientId(@RequestParam("clientId") Long clientId) {
         if (clientRepository.existsById(clientId)) {
             return goodMarkRepository.getGoodMarksByClientId(clientId);
         } else throw new ClientNotFoundException("Client with id: " + clientId+ " not found!");
+    }
+
+    @DeleteMapping("/{id}/delete")
+    public void delete(@PathVariable("id") Long id) {
+        Good good = goodRepository.findById(id).orElseThrow(GoodNotFoundException::new);
+
+        if (goodRepository.isPresentOnClientOrders(id)) {
+            good.setDeleted(true);
+            goodRepository.save(good);
+        } else {
+            goodMarkRepository.deleteAllByGoodId(id);
+            goodRepository.delete(good);
+        }
     }
 }

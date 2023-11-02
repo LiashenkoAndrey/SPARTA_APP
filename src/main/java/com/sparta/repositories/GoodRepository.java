@@ -21,4 +21,9 @@ public interface GoodRepository extends JpaRepository<Good, Long> {
     );
 
 
+    @Query(value = "select exists(select * from good_amount where good_id = :goodId)", nativeQuery = true)
+    boolean isPresentOnClientOrders(@Param("goodId") Long id);
+
+
+    List<Good> findAllByIsDeletedFalse();
 }

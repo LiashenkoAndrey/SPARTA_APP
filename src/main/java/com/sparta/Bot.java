@@ -1,6 +1,5 @@
 package com.sparta;
 
-import com.sparta.repositories.ClientRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,7 +19,7 @@ import java.util.List;
 public class Bot extends TelegramLongPollingBot {
     private static final Logger log = LogManager.getLogger(Bot.class);
 
-    private static final String HOST = "https://sparta.miloverada.gov.ua:3000/";
+    private static final String HOST = "https://sparta.miloverada.gov.ua:3000";
     @Override
     public void onUpdateReceived(Update update) {
         var message = update.getMessage();
@@ -69,9 +68,6 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    private void serveAdmin() {
-
-    }
 
     @Override
     public String getBotToken() {

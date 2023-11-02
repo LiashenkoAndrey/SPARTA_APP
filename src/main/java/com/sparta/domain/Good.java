@@ -37,4 +37,6 @@ public class Good {
 
     @Formula("(select count(*) from good_mark g where g.good_id = ID and g.mark = false)")
     private Integer dislikes;
+
+    private boolean isDeleted;
 }
