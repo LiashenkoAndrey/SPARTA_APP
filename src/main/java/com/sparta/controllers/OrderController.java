@@ -31,7 +31,6 @@ public class OrderController {
 
     private final OrderRepository orderRepository;
 
-    @CrossOrigin(origins = "*")
     @PostMapping("/new")
     public void saveNewOrder(@Valid @RequestBody Order order) throws TelegramApiException {
         log.info("received a new order: " + order);
@@ -51,9 +50,24 @@ public class OrderController {
                 .build());
     }
 
-    @CrossOrigin(origins = "*")
     @GetMapping("/all")
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll(Sort.by("createdOn").descending());
+    public List<Order> getAllOrders(@RequestParam(value = "forToday", required = false, defaultValue = "false") Boolean forToday) {
+        log.info("for today: " + forToday);
+        if (forToday) {
+            return orderRepository.findForToday();
+
+        } else {
+            return orderRepository.findAll(Sort.by("createdOn").descending());
+        }
+    }
+
+    @DeleteMapping("/{id}/delete")
+    public void delete(@PathVariable("id") Long id) {
+
+        log.info("Delete order: " + id);
+
+        if (orderRepository.existsById(id)) {
+            orderRepository.deleteById(id);
+        }
     }
 }
