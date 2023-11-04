@@ -42,10 +42,10 @@ public class OrderController {
             clientRepository.save(order.getClient());
         }
 
-        orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
 
         bot.execute(SendMessage.builder()
-                .text("Ваше замовлення прийняте!")
+                .text("Ваше замовлення прийняте!\nВаш номер: " + savedOrder.id)
                 .chatId(order.getClient().getTelegramId())
                 .build());
     }
